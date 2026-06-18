@@ -1,6 +1,11 @@
-import type { TodoItemProps } from '@/types/todo'
-import { Checkbox } from '@/components/ui/Checkbox'
-import { Button } from '@/components/ui/Button'
+import type { Todo } from '@/types/todo'
+import { Button, Checkbox } from '@/components/ui'
+
+interface TodoItemProps {
+  todo: Todo
+  onToggle: (id: string) => void
+  onDelete: (id: string) => void
+}
 
 export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
   return (

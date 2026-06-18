@@ -239,6 +239,112 @@ meta.args  →  story.args  →  controls panel overrides
 
 This is why you can put `onClick: fn()` once in `meta.args` and it applies to every story automatically.
 
+## Mocks via `fn()` and the Actions panel
+
+`fn()` from `storybook/test` creates a **mock function** — it does nothing on its own, but records every call (arguments, return value, call count). Storybook auto-detects mocks declared in `args` and logs each invocation in the **Actions** panel at the bottom of the canvas.
+
+```tsx
+const meta: Meta<typeof Form> = {
+  args: {
+    onSubmit: fn(),   // every call to props.onSubmit shows up in Actions
+  },
+}
+```
+
+### How to keep the Actions panel working
+
+The connection between a mock and the Actions panel is via the specific `fn()` instance stored in `args`. Two common ways to break it:
+
+```tsx
+// ❌ Creating a new mock inline — disconnects from args
+<Form onSubmit={fn()} />
+
+// ❌ Replacing with a non-mock — disconnects from args
+<Form onSubmit={() => doStuff()} />
+```
+
+In a `render` function, always invoke the mock from `args`:
+
+```tsx
+export const Interactive: Story = {
+  render: (args) => {
+    const handleSubmit = (data) => {
+      args.onSubmit(data)   // ✅ mock from args — logs in Actions panel
+      // ...local state updates...
+    }
+    return <Form onSubmit={handleSubmit} />
+  },
+}
+```
+
+### Where to see calls
+
+- **Single story view** (sidebar entry like `Interactive`): bottom panel → `Actions` tab.
+- **Docs view** does not show Actions — that page is a static catalog.
+- The bottom panel may be hidden — toggle with the `D` shortcut or the panel button in the toolbar.
+
+### Storybook 10 note
+
+Older versions required `@storybook/addon-actions`. In Storybook 10 the Actions panel is **built into core** when using `fn()`. The separate addon is no longer needed.
+
+## `play` functions — programmatic interactions
+
+A `play` function runs **after** the story renders and uses Testing Library APIs to drive the component as a user would: type into inputs, click buttons, navigate. This is the canonical way to demonstrate states that depend on user interaction (e.g. a form that has no `initialValue` prop but should be shown filled).
+
+```tsx
+import { userEvent, within } from 'storybook/test'
+
+export const Filled: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const input = canvas.getByPlaceholderText('Add a new todo')
+    await userEvent.type(input, 'Buy milk')
+  },
+}
+```
+
+- `canvasElement` is the DOM root of the rendered story.
+- `within(canvasElement)` scopes Testing Library queries to this story only.
+- `userEvent.*` simulates real user actions and triggers the same handlers as a real interaction (so internal `useState` updates).
+
+### `play` does not run in Docs by default
+
+The Docs page renders many stories simultaneously; running `play` for all of them would be slow and visually chaotic. Storybook intentionally skips `play` on the Docs page — you'll see the **default state** of each story there, and the **played state** only when you open the story individually.
+
+To opt in for a specific story (rare, but possible):
+
+```tsx
+export const Filled: Story = {
+  parameters: {
+    docs: { story: { autoplay: true } },
+  },
+  play: async (/* ... */) => { /* ... */ },
+}
+```
+
+Or for the whole module — set the same parameter in `meta.parameters`. Default off is the right behavior; only flip it when a story really needs to demonstrate the interactive state in the catalog.
+
+### When to use `play` vs `args`
+
+| Need | Tool |
+|------|------|
+| Show a state that's reachable via props | `args` |
+| Show a state that requires typing/clicking | `play` |
+| Compose multiple interactions for a regression scenario | `play` |
+| Verify behavior in tests | `play` + assertions (read more in [Storybook tests](https://storybook.js.org/docs/writing-tests/component-testing)) |
+
+## Layout choice — match the real-world context
+
+The `parameters.layout` value tells Storybook **what kind of context to render the story in**. There is no "no layout" — even the absence of a value uses the default `padded`. Pick the value that matches how the component will be used in the real app.
+
+| Layout | When |
+|--------|------|
+| `centered` | Tiny, self-contained UI: `Button`, `Checkbox`, `Badge`. Easy to inspect details. |
+| `padded` (default) | Components that depend on container width: forms, lists, cards. |
+| `fullscreen` | Full pages and layout components that manage their own size. |
+
+**Pitfall:** in `centered` layout, Storybook centers the story and gives it content-width — `w-full` and `max-w-*` on the component will look like they did nothing. That's a Storybook artifact, not a bug in the component. Switch to `padded` (or add a `decorators` wrapper with explicit width) and the classes will work as expected in the real app.
+
 ### Key concepts
 
 | Term | Meaning |

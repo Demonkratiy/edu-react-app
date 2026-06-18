@@ -77,6 +77,36 @@ By default, a flex item refuses to shrink below the width of its content. A long
 
 Without `min-w-0`, the wrap rules can't take effect because the flex item insists on its content width.
 
+## Common gotcha: `flex-1` needs a constrained container
+
+`flex-1` (= `flex: 1 1 0%`) tells a flex item "grow to fill available space". But "available space" only exists if the **flex container itself has a defined width**. If the container's width comes from its children (the default for a `<form>`, `<div>`, etc. with no width set), `flex-1` has nothing to grow into — it stays at content size.
+
+```tsx
+{/* ❌ Form has no width — flex-1 has nothing to fill */}
+<form className="flex gap-2">
+  <Input className="flex-1" />
+  <Button>Add</Button>
+</form>
+
+{/* ✅ Container has a width — flex-1 grows to fill it */}
+<form className="flex gap-2 w-full max-w-md">
+  <Input className="flex-1" />
+  <Button>Add</Button>
+</form>
+```
+
+The cascade:
+
+```
+parent → must give the flex container some width (or width: 100%)
+  ↓
+flex container → must have a defined width (w-full, w-96, max-w-*, etc.)
+  ↓
+flex child with flex-1 → grows to fill that width
+```
+
+If `flex-1` "doesn't do anything", look up the chain: the container or one of its ancestors is sized by content, not by an explicit width. Storybook with `layout: 'centered'` is a notable case where this happens.
+
 ## Useful tools
 
 - [Tailwind docs](https://tailwindcss.com/docs) — fast search by CSS property name.
