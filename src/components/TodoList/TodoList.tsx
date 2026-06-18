@@ -9,7 +9,7 @@ interface TodoListProps {
 
 export const TodoList = ({ todos, onToggle, onDelete }: TodoListProps) => {
   if (todos.length === 0) {
-    return <p>No tasks yet</p>;
+    return <p>No tasks yet, time to relax 😉</p>;
   }
   return (
     <ul className='flex flex-col w-full divide-y divide-gray-200'>
@@ -17,5 +17,5 @@ export const TodoList = ({ todos, onToggle, onDelete }: TodoListProps) => {
         <TodoItem key={todo.id} todo={todo} onToggle={onToggle} onDelete={onDelete} />
       ))}
     </ul>
-  )
-}
+  );
+};
