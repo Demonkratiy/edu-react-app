@@ -12,7 +12,7 @@ export const TodoList = ({ todos, onToggle, onDelete }: TodoListProps) => {
     return <p>No tasks yet, time to relax 😉</p>;
   }
   return (
-    <ul className='flex flex-col w-full divide-y divide-gray-200'>
+    <ul className='flex w-full flex-col divide-y divide-gray-200'>
       {todos.map((todo) => (
         <TodoItem key={todo.id} todo={todo} onToggle={onToggle} onDelete={onDelete} />
       ))}

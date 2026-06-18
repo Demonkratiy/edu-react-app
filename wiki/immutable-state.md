@@ -14,20 +14,20 @@ Inside React, every `setState` call triggers roughly:
 
 ```js
 if (Object.is(prevState, nextState)) {
-  return // no re-render
+  return; // no re-render
 }
-scheduleRerender()
+scheduleRerender();
 ```
 
 For primitives this is straightforward — `5 === 5`, `'hello' === 'hello'`. For objects and arrays, equality is **by reference**:
 
 ```js
-const a = [1, 2, 3]
-const b = a            // same reference
-const c = [1, 2, 3]    // different reference
+const a = [1, 2, 3];
+const b = a; // same reference
+const c = [1, 2, 3]; // different reference
 
-Object.is(a, b) // true
-Object.is(a, c) // false (despite identical content)
+Object.is(a, b); // true
+Object.is(a, c); // false (despite identical content)
 ```
 
 So if you mutate an array stored in state, then call `setState(theSameArray)`, React sees the same reference and skips work — even though the data inside changed. Your UI silently desyncs from your data.
@@ -37,27 +37,27 @@ So if you mutate an array stored in state, then call `setState(theSameArray)`, R
 ```tsx
 // ❌ Mutates in place — reference unchanged
 const toggle = (id: string) => {
-  const todo = todos.find(t => t.id === id)
-  todo.completed = !todo.completed
-  setTodos(todos) // todos === todos → no re-render
-}
+  const todo = todos.find((t) => t.id === id);
+  todo.completed = !todo.completed;
+  setTodos(todos); // todos === todos → no re-render
+};
 
 // ✅ Produces a new array + new object
 const toggle = (id: string) => {
-  setTodos(prev =>
-    prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t)
-  )
-}
+  setTodos((prev) => prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)));
+};
 ```
 
 The rule applies to **all nesting levels**:
 
 ```js
 // ❌ Mutates the inner object even though the outer array is new
-setTodos([...todos.map(t => {
-  if (t.id === id) t.completed = !t.completed
-  return t
-})])
+setTodos([
+  ...todos.map((t) => {
+    if (t.id === id) t.completed = !t.completed;
+    return t;
+  }),
+]);
 ```
 
 The outer array is new, but `t.completed = ...` mutates the original object inside. Other code holding a reference to that todo (e.g. memoized children, devtools snapshots, undo history) sees its data change retroactively. Always create a new object at the level you're changing.
@@ -69,7 +69,7 @@ For arrays in state, you need exactly three operations. Memorize the idioms.
 ### Add
 
 ```ts
-setItems(prev => [...prev, newItem])
+setItems((prev) => [...prev, newItem]);
 ```
 
 Spread creates a new array. `newItem` is appended.
@@ -79,7 +79,7 @@ To prepend: `[newItem, ...prev]`.
 ### Remove
 
 ```ts
-setItems(prev => prev.filter(item => item.id !== id))
+setItems((prev) => prev.filter((item) => item.id !== id));
 ```
 
 `filter` returns a new array. The matching item is excluded.
@@ -87,9 +87,7 @@ setItems(prev => prev.filter(item => item.id !== id))
 ### Update one item
 
 ```ts
-setItems(prev =>
-  prev.map(item => item.id === id ? { ...item, ...changes } : item)
-)
+setItems((prev) => prev.map((item) => (item.id === id ? { ...item, ...changes } : item)));
 ```
 
 `map` returns a new array. The matching item is replaced with a **new object** that spreads the old one and overrides specific fields. Other items pass through unchanged (same references — that's good, lets React skip work on them).
@@ -98,27 +96,27 @@ setItems(prev =>
 
 These all mutate the array they're called on:
 
-| Method | What it mutates |
-|--------|-----------------|
-| `push`, `pop` | End of the array |
-| `shift`, `unshift` | Start of the array |
-| `splice` | Anywhere |
-| `sort` | Reorders in place |
-| `reverse` | Reverses in place |
-| `fill` | Overwrites elements |
+| Method             | What it mutates     |
+| ------------------ | ------------------- |
+| `push`, `pop`      | End of the array    |
+| `shift`, `unshift` | Start of the array  |
+| `splice`           | Anywhere            |
+| `sort`             | Reorders in place   |
+| `reverse`          | Reverses in place   |
+| `fill`             | Overwrites elements |
 
 If you need any of these, copy first:
 
 ```ts
-setItems(prev => [...prev].sort(compare))
-setItems(prev => [...prev].reverse())
+setItems((prev) => [...prev].sort(compare));
+setItems((prev) => [...prev].reverse());
 ```
 
 For objects, the same applies — `delete obj.key` mutates. Use destructuring:
 
 ```ts
-const { [keyToRemove]: _, ...rest } = obj
-setObj(rest)
+const { [keyToRemove]: _, ...rest } = obj;
+setObj(rest);
 ```
 
 ## Functional setState — when state depends on previous state
@@ -126,8 +124,8 @@ setObj(rest)
 There are two ways to call a state setter:
 
 ```ts
-setTodos(newValue)                  // value form
-setTodos(prev => computeFrom(prev)) // functional form
+setTodos(newValue); // value form
+setTodos((prev) => computeFrom(prev)); // functional form
 ```
 
 When the next value **depends on the current one** — always use the functional form.
@@ -136,9 +134,9 @@ When the next value **depends on the current one** — always use the functional
 
 ```tsx
 const addTwo = () => {
-  setTodos([...todos, todoA])  // todos = [] at this point
-  setTodos([...todos, todoB])  // still [] — same closure capture
-}
+  setTodos([...todos, todoA]); // todos = [] at this point
+  setTodos([...todos, todoB]); // still [] — same closure capture
+};
 // Final state: only todoB, not both
 ```
 
@@ -148,9 +146,9 @@ Functional form fixes this:
 
 ```tsx
 const addTwo = () => {
-  setTodos(prev => [...prev, todoA])
-  setTodos(prev => [...prev, todoB])
-}
+  setTodos((prev) => [...prev, todoA]);
+  setTodos((prev) => [...prev, todoB]);
+};
 // React applies them sequentially: prev in the second call is the result of the first
 ```
 
@@ -161,9 +159,9 @@ If the new state is a transformation of the current state — `+1`, `[...prev, i
 The value form is fine only when the new state is a completely fresh value unrelated to the previous one:
 
 ```ts
-setUser(null)           // logout — value form is fine
-setQuery('')            // reset
-setItems(serverData)    // replace with response
+setUser(null); // logout — value form is fine
+setQuery(''); // reset
+setItems(serverData); // replace with response
 ```
 
 ## Generating stable IDs
@@ -173,7 +171,7 @@ Items in lists need stable IDs (so `key` works correctly — see [Rendering patt
 Built into modern browsers:
 
 ```ts
-crypto.randomUUID()
+crypto.randomUUID();
 // => "550e8400-e29b-41d4-a716-446655440000"
 ```
 

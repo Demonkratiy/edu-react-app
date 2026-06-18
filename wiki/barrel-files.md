@@ -4,18 +4,18 @@ A **barrel file** is an `index.ts` (or `index.js`) that re-exports the public AP
 
 ```ts
 // src/components/ui/index.ts
-export { Button } from './Button'
-export { Input } from './Input'
-export { Checkbox } from './Checkbox'
+export { Button } from './Button';
+export { Input } from './Input';
+export { Checkbox } from './Checkbox';
 ```
 
 ```tsx
 // Without barrel
-import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Input'
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
 
 // With barrel
-import { Button, Input } from '@/components/ui'
+import { Button, Input } from '@/components/ui';
 ```
 
 ## When to use

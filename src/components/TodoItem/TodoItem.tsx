@@ -1,22 +1,24 @@
-import type { Todo } from '@/types/todo'
-import { Button, Checkbox } from '@/components/ui'
+import type { Todo } from '@/types/todo';
+import { Button, Checkbox } from '@/components/ui';
 
 interface TodoItemProps {
-  todo: Todo
-  onToggle: (id: string) => void
-  onDelete: (id: string) => void
+  todo: Todo;
+  onToggle: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
 export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
   return (
-    <li className="flex items-center justify-between py-2 gap-3 w-full">
-        <label className="flex items-center gap-2 cursor-pointer min-w-0">
-            <Checkbox checked={todo.completed} onChange={() => onToggle(todo.id)} />
-            <span className={`${todo.completed ? 'line-through text-gray-500' : ''} wrap-anywhere`}>
-                {todo.text}
-            </span>
-        </label>
-        <Button variant="danger" size="sm" onClick={() => onDelete(todo.id)}>Delete</Button>
+    <li className='flex w-full items-center justify-between gap-3 py-2'>
+      <label className='flex min-w-0 cursor-pointer items-center gap-2'>
+        <Checkbox checked={todo.completed} onChange={() => onToggle(todo.id)} />
+        <span className={`${todo.completed ? 'text-gray-500 line-through' : ''} wrap-anywhere`}>
+          {todo.text}
+        </span>
+      </label>
+      <Button variant='danger' size='sm' onClick={() => onDelete(todo.id)}>
+        Delete
+      </Button>
     </li>
-  )
-}
+  );
+};

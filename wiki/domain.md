@@ -4,20 +4,20 @@
 
 The **domain** is the problem area an application solves — the entities, rules, and concepts the app is built around.
 
-| App | Domain |
-|-----|--------|
-| TODO app | Tasks, statuses, deadlines |
-| E-commerce | Products, orders, cart, users |
-| Banking | Accounts, transactions, currencies |
-| Social network | Posts, comments, likes, friends |
+| App            | Domain                             |
+| -------------- | ---------------------------------- |
+| TODO app       | Tasks, statuses, deadlines         |
+| E-commerce     | Products, orders, cart, users      |
+| Banking        | Accounts, transactions, currencies |
+| Social network | Posts, comments, likes, friends    |
 
 In code, the domain is usually expressed via **types** and **business rules**:
 
 ```ts
 interface Todo {
-  id: string
-  text: string
-  completed: boolean
+  id: string;
+  text: string;
+  completed: boolean;
 }
 ```
 

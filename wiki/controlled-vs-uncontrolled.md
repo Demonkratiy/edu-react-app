@@ -23,28 +23,28 @@ const [text, setText] = useState('')
 State lives in the **DOM**. React only sets the initial value.
 
 ```tsx
-<input defaultValue="hello" />
+<input defaultValue='hello' />
 ```
 
 - `defaultValue` is just the starting value; the DOM takes it from there.
 - To read the current value, use a `ref`:
 
   ```tsx
-  const ref = useRef<HTMLInputElement>(null)
-  ref.current?.value
+  const ref = useRef<HTMLInputElement>(null);
+  ref.current?.value;
   ```
 
 - Simpler for trivial cases (demos, one-off forms).
 
 ## Cheat sheet
 
-| Element | Controlled prop | Uncontrolled prop |
-|---------|----------------|-------------------|
-| `<input type="text">` | `value` | `defaultValue` |
-| `<input type="checkbox">` | `checked` | `defaultChecked` |
-| `<input type="radio">` | `checked` | `defaultChecked` |
-| `<select>` | `value` | `defaultValue` |
-| `<textarea>` | `value` | `defaultValue` |
+| Element                   | Controlled prop | Uncontrolled prop |
+| ------------------------- | --------------- | ----------------- |
+| `<input type="text">`     | `value`         | `defaultValue`    |
+| `<input type="checkbox">` | `checked`       | `defaultChecked`  |
+| `<input type="radio">`    | `checked`       | `defaultChecked`  |
+| `<select>`                | `value`         | `defaultValue`    |
+| `<textarea>`              | `value`         | `defaultValue`    |
 
 ## Why this matters in Storybook
 
@@ -57,10 +57,10 @@ For interactive stories that need real state, use a `render` function:
 ```tsx
 export const Interactive: Story = {
   render: () => {
-    const [value, setValue] = useState('')
-    return <Input value={value} onChange={(e) => setValue(e.target.value)} />
+    const [value, setValue] = useState('');
+    return <Input value={value} onChange={(e) => setValue(e.target.value)} />;
   },
-}
+};
 ```
 
 ## Component design takeaway

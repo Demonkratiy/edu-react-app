@@ -16,7 +16,7 @@ export const AddTodoForm = ({ onAdd }: AddTodoFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className='flex items-start gap-2 w-full max-w-md'>
+    <form onSubmit={handleSubmit} className='flex w-full max-w-md items-start gap-2'>
       <Input
         className='flex-1'
         type='text'

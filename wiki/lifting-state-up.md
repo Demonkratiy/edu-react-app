@@ -74,13 +74,13 @@ function TodoItem({ todo, onToggle, onDelete }: Props) {
 
 Callback props start with `on*`, mirroring native DOM events:
 
-| Prop | When called |
-|------|-------------|
+| Prop       | When called            |
+| ---------- | ---------------------- |
 | `onToggle` | User toggled something |
 | `onDelete` | User deleted something |
-| `onSubmit` | User submitted a form |
-| `onChange` | A value changed |
-| `onClick` | Something was clicked |
+| `onSubmit` | User submitted a form  |
+| `onChange` | A value changed        |
+| `onClick`  | Something was clicked  |
 
 ## Benefits
 

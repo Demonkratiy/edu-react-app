@@ -1,7 +1,7 @@
 interface Todo {
-  id: string
-  text: string
-  completed: boolean
+  id: string;
+  text: string;
+  completed: boolean;
 }
 
-export type { Todo }
+export type { Todo };

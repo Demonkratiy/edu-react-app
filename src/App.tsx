@@ -11,7 +11,9 @@ function App() {
   };
 
   const toggleTodo = (id: string) => {
-    setTodos((prev) => prev.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo)));
+    setTodos((prev) =>
+      prev.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo)),
+    );
   };
 
   const deleteTodo = (id: string) => {
@@ -20,8 +22,8 @@ function App() {
 
   return (
     <div className='min-h-screen bg-gray-100'>
-      <main className='max-w-md mx-auto p-4 flex flex-col gap-4'>
-        <div className='bg-white rounded-lg shadow p-4 flex flex-col gap-4'>
+      <main className='mx-auto flex max-w-md flex-col gap-4 p-4'>
+        <div className='flex flex-col gap-4 rounded-lg bg-white p-4 shadow'>
           <h1 className='text-3xl font-bold'>Todo list:</h1>
           <AddTodoForm onAdd={addTodo} />
           <TodoList todos={todos} onToggle={toggleTodo} onDelete={deleteTodo} />

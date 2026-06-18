@@ -29,15 +29,15 @@ src/components/
 `index.ts` re-exports the component so imports stay clean:
 
 ```ts
-import { Button } from '@/components/ui/Button'
+import { Button } from '@/components/ui/Button';
 ```
 
 ## Configuration files
 
-| File | Purpose |
-|------|---------|
-| `.storybook/main.ts` | Which files are stories, which addons are enabled, which framework. |
-| `.storybook/preview.tsx` | Global setup: imports CSS (`index.css`), decorators, parameters. |
+| File                       | Purpose                                                                 |
+| -------------------------- | ----------------------------------------------------------------------- |
+| `.storybook/main.ts`       | Which files are stories, which addons are enabled, which framework.     |
+| `.storybook/preview.tsx`   | Global setup: imports CSS (`index.css`), decorators, parameters.        |
 | `.storybook/tsconfig.json` | TS config for files inside `.storybook/` (extends `tsconfig.app.json`). |
 
 ### Tailwind in Storybook
@@ -45,7 +45,7 @@ import { Button } from '@/components/ui/Button'
 Storybook renders components in a separate iframe and does not know about the app's CSS by default. To make Tailwind classes work, import the global stylesheet in `preview.tsx`:
 
 ```tsx
-import '../src/index.css'
+import '../src/index.css';
 ```
 
 ## Anatomy of a story file
@@ -56,9 +56,9 @@ A story file has two kinds of exports:
 - **Named exports** — individual stories, each rendering the component in a specific state.
 
 ```tsx
-import type { Meta, StoryObj } from '@storybook/react-vite'
-import { fn } from 'storybook/test'
-import { Button } from './Button'
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { fn } from 'storybook/test';
+import { Button } from './Button';
 
 const meta: Meta<typeof Button> = {
   title: 'UI/Button',
@@ -69,14 +69,14 @@ const meta: Meta<typeof Button> = {
     onClick: fn(),
     children: 'Click me',
   },
-}
-export default meta
+};
+export default meta;
 
-type Story = StoryObj<typeof Button>
+type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
   args: { variant: 'primary' },
-}
+};
 ```
 
 ## The `meta` object — full reference
@@ -111,30 +111,32 @@ const meta: Meta<typeof MyComponent> = {
 Slashes create folders.
 
 ```tsx
-title: 'UI/Button'           // UI > Button
-title: 'Todos/TodoItem'      // Todos > TodoItem
-title: 'UI/Forms/Input'      // UI > Forms > Input
+title: 'UI/Button'; // UI > Button
+title: 'Todos/TodoItem'; // Todos > TodoItem
+title: 'UI/Forms/Input'; // UI > Forms > Input
 ```
 
 **Rule of thumb:**
+
 - `UI/*` for domain-agnostic UI kit.
 - `<Feature>/*` for domain-specific business components.
 
 ### 2. `component` — the component itself
 
 Used by Storybook for:
+
 - Auto-generating controls from prop types.
 - Generating the Docs page.
 - Type inference for `args` and `StoryObj<typeof Component>`.
 
 ### 3. `tags` — behavior flags
 
-| Tag | Effect |
-|-----|--------|
-| `'autodocs'` | Generate a Docs page with prop tables and all stories. |
-| `'!autodocs'` | Disable autodocs (when enabled globally). |
-| `'!dev'` | Hide from the Storybook UI in dev mode. |
-| `'!test'` | Skip when running stories as tests. |
+| Tag           | Effect                                                 |
+| ------------- | ------------------------------------------------------ |
+| `'autodocs'`  | Generate a Docs page with prop tables and all stories. |
+| `'!autodocs'` | Disable autodocs (when enabled globally).              |
+| `'!dev'`      | Hide from the Storybook UI in dev mode.                |
+| `'!test'`     | Skip when running stories as tests.                    |
 
 Most components: `tags: ['autodocs']`.
 
@@ -150,21 +152,23 @@ parameters: {
 }
 ```
 
-| Parameter | Purpose |
-|-----------|---------|
-| `layout` | `'centered'` (center the component), `'fullscreen'` (no padding), `'padded'` (default with padding). |
-| `backgrounds` | Switch canvas background colors (light/dark/custom). |
-| `viewport` | Simulate device sizes (mobile, tablet, desktop). |
-| `docs` | Customize the auto-generated docs page. |
-| `a11y` | Configure the accessibility addon. |
+| Parameter     | Purpose                                                                                              |
+| ------------- | ---------------------------------------------------------------------------------------------------- |
+| `layout`      | `'centered'` (center the component), `'fullscreen'` (no padding), `'padded'` (default with padding). |
+| `backgrounds` | Switch canvas background colors (light/dark/custom).                                                 |
+| `viewport`    | Simulate device sizes (mobile, tablet, desktop).                                                     |
+| `docs`        | Customize the auto-generated docs page.                                                              |
+| `a11y`        | Configure the accessibility addon.                                                                   |
 
 **Heuristic:**
+
 - Narrow components (Button, Input, TodoItem) → `layout: 'centered'`.
 - Page-level components → `layout: 'fullscreen'`.
 
 ### 5. `decorators` — wrappers around each story
 
 Used when a component **needs context** to render properly:
+
 - Theme/i18n providers.
 - Router context.
 - A wrapper for layout/styling tests.
@@ -172,11 +176,11 @@ Used when a component **needs context** to render properly:
 ```tsx
 decorators: [
   (Story) => (
-    <div className="p-4 bg-gray-100">
+    <div className='bg-gray-100 p-4'>
       <Story />
     </div>
   ),
-]
+];
 ```
 
 A decorator receives the story as a function and must render it. Multiple decorators wrap each other.
@@ -206,13 +210,13 @@ argTypes: {
 }
 ```
 
-| Control type | When |
-|--------------|------|
-| `'select'` / `'radio'` | A string prop with a fixed set of values. |
-| `'boolean'` | Boolean props. |
-| `'text'` | Free-form string. |
-| `'object'` | Complex object props (rendered as JSON editor). |
-| `'color'`, `'date'`, `'number'`, `'range'` | Specialized inputs. |
+| Control type                               | When                                            |
+| ------------------------------------------ | ----------------------------------------------- |
+| `'select'` / `'radio'`                     | A string prop with a fixed set of values.       |
+| `'boolean'`                                | Boolean props.                                  |
+| `'text'`                                   | Free-form string.                               |
+| `'object'`                                 | Complex object props (rendered as JSON editor). |
+| `'color'`, `'date'`, `'number'`, `'range'` | Specialized inputs.                             |
 
 ## Checklist when writing a new story file
 
@@ -246,9 +250,9 @@ This is why you can put `onClick: fn()` once in `meta.args` and it applies to ev
 ```tsx
 const meta: Meta<typeof Form> = {
   args: {
-    onSubmit: fn(),   // every call to props.onSubmit shows up in Actions
+    onSubmit: fn(), // every call to props.onSubmit shows up in Actions
   },
-}
+};
 ```
 
 ### How to keep the Actions panel working
@@ -269,12 +273,12 @@ In a `render` function, always invoke the mock from `args`:
 export const Interactive: Story = {
   render: (args) => {
     const handleSubmit = (data) => {
-      args.onSubmit(data)   // ✅ mock from args — logs in Actions panel
+      args.onSubmit(data); // ✅ mock from args — logs in Actions panel
       // ...local state updates...
-    }
-    return <Form onSubmit={handleSubmit} />
+    };
+    return <Form onSubmit={handleSubmit} />;
   },
-}
+};
 ```
 
 ### Where to see calls
@@ -292,15 +296,15 @@ Older versions required `@storybook/addon-actions`. In Storybook 10 the Actions 
 A `play` function runs **after** the story renders and uses Testing Library APIs to drive the component as a user would: type into inputs, click buttons, navigate. This is the canonical way to demonstrate states that depend on user interaction (e.g. a form that has no `initialValue` prop but should be shown filled).
 
 ```tsx
-import { userEvent, within } from 'storybook/test'
+import { userEvent, within } from 'storybook/test';
 
 export const Filled: Story = {
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-    const input = canvas.getByPlaceholderText('Add a new todo')
-    await userEvent.type(input, 'Buy milk')
+    const canvas = within(canvasElement);
+    const input = canvas.getByPlaceholderText('Add a new todo');
+    await userEvent.type(input, 'Buy milk');
   },
-}
+};
 ```
 
 - `canvasElement` is the DOM root of the rendered story.
@@ -318,49 +322,51 @@ export const Filled: Story = {
   parameters: {
     docs: { story: { autoplay: true } },
   },
-  play: async (/* ... */) => { /* ... */ },
-}
+  play: async (/* ... */) => {
+    /* ... */
+  },
+};
 ```
 
 Or for the whole module — set the same parameter in `meta.parameters`. Default off is the right behavior; only flip it when a story really needs to demonstrate the interactive state in the catalog.
 
 ### When to use `play` vs `args`
 
-| Need | Tool |
-|------|------|
-| Show a state that's reachable via props | `args` |
-| Show a state that requires typing/clicking | `play` |
-| Compose multiple interactions for a regression scenario | `play` |
-| Verify behavior in tests | `play` + assertions (read more in [Storybook tests](https://storybook.js.org/docs/writing-tests/component-testing)) |
+| Need                                                    | Tool                                                                                                                |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Show a state that's reachable via props                 | `args`                                                                                                              |
+| Show a state that requires typing/clicking              | `play`                                                                                                              |
+| Compose multiple interactions for a regression scenario | `play`                                                                                                              |
+| Verify behavior in tests                                | `play` + assertions (read more in [Storybook tests](https://storybook.js.org/docs/writing-tests/component-testing)) |
 
 ## Layout choice — match the real-world context
 
 The `parameters.layout` value tells Storybook **what kind of context to render the story in**. There is no "no layout" — even the absence of a value uses the default `padded`. Pick the value that matches how the component will be used in the real app.
 
-| Layout | When |
-|--------|------|
-| `centered` | Tiny, self-contained UI: `Button`, `Checkbox`, `Badge`. Easy to inspect details. |
-| `padded` (default) | Components that depend on container width: forms, lists, cards. |
-| `fullscreen` | Full pages and layout components that manage their own size. |
+| Layout             | When                                                                             |
+| ------------------ | -------------------------------------------------------------------------------- |
+| `centered`         | Tiny, self-contained UI: `Button`, `Checkbox`, `Badge`. Easy to inspect details. |
+| `padded` (default) | Components that depend on container width: forms, lists, cards.                  |
+| `fullscreen`       | Full pages and layout components that manage their own size.                     |
 
 **Pitfall:** in `centered` layout, Storybook centers the story and gives it content-width — `w-full` and `max-w-*` on the component will look like they did nothing. That's a Storybook artifact, not a bug in the component. Switch to `padded` (or add a `decorators` wrapper with explicit width) and the classes will work as expected in the real app.
 
 ### Key concepts
 
-| Term | Meaning |
-|------|---------|
-| `Meta` | Default export config: title, component, default args. |
-| `Story` (`StoryObj`) | Single named export = one story in the sidebar. |
-| `args` | Props passed to the component. Story `args` merge with `meta.args`. |
-| `argTypes` | Controls how Storybook renders the controls panel (`select`, `radio`, `boolean`, etc.). |
-| `tags: ['autodocs']` | Generates a Docs page with prop tables and examples. |
-| `fn()` from `storybook/test` | Mock function. Logs calls in the **Actions** panel — useful for `onClick`, `onChange`. |
+| Term                         | Meaning                                                                                 |
+| ---------------------------- | --------------------------------------------------------------------------------------- |
+| `Meta`                       | Default export config: title, component, default args.                                  |
+| `Story` (`StoryObj`)         | Single named export = one story in the sidebar.                                         |
+| `args`                       | Props passed to the component. Story `args` merge with `meta.args`.                     |
+| `argTypes`                   | Controls how Storybook renders the controls panel (`select`, `radio`, `boolean`, etc.). |
+| `tags: ['autodocs']`         | Generates a Docs page with prop tables and examples.                                    |
+| `fn()` from `storybook/test` | Mock function. Logs calls in the **Actions** panel — useful for `onClick`, `onChange`.  |
 
 ## Commands
 
-| Command | What it does |
-|---------|--------------|
-| `npm run storybook` | Start dev server (default port `6006`). |
+| Command                   | What it does                              |
+| ------------------------- | ----------------------------------------- |
+| `npm run storybook`       | Start dev server (default port `6006`).   |
 | `npm run build-storybook` | Build a static version (for deploy / CI). |
 
 ## Useful tips

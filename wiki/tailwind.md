@@ -4,26 +4,26 @@
 
 Tailwind classes are 1-to-1 mappings of CSS properties. There's no new "language" — you translate what you'd write in CSS.
 
-| CSS | Tailwind |
-|-----|----------|
-| `display: flex` | `flex` |
-| `align-items: center` | `items-center` |
-| `padding: 8px` | `p-2` |
-| `padding-inline: 16px` | `px-4` |
-| `gap: 12px` | `gap-3` |
-| `color: #6b7280` | `text-gray-500` |
+| CSS                    | Tailwind        |
+| ---------------------- | --------------- |
+| `display: flex`        | `flex`          |
+| `align-items: center`  | `items-center`  |
+| `padding: 8px`         | `p-2`           |
+| `padding-inline: 16px` | `px-4`          |
+| `gap: 12px`            | `gap-3`         |
+| `color: #6b7280`       | `text-gray-500` |
 
 ## Spacing scale
 
 Almost all sizes (padding, margin, gap, width, height) use the scale `0..96`, step = `0.25rem` (4px).
 
 | Class | Value |
-|-------|-------|
-| `p-0` | 0 |
-| `p-1` | 4px |
-| `p-2` | 8px |
-| `p-4` | 16px |
-| `p-8` | 32px |
+| ----- | ----- |
+| `p-0` | 0     |
+| `p-1` | 4px   |
+| `p-2` | 8px   |
+| `p-4` | 16px  |
+| `p-8` | 32px  |
 
 Rule of thumb: `N → N * 4px`.
 
@@ -34,26 +34,26 @@ Brightness scale: `50, 100, 200, ..., 900, 950`. Higher = darker.
 
 ## Essential classes for 80% of cases
 
-| Category | Classes |
-|----------|---------|
-| Layout | `flex`, `grid`, `block`, `inline-block`, `hidden` |
-| Flex | `items-center`, `justify-between`, `gap-2`, `flex-1`, `flex-col` |
-| Spacing | `p-{N}`, `px-`, `py-`, `m-`, `mx-`, `gap-` |
-| Sizing | `w-full`, `w-{N}`, `max-w-md`, `min-w-0`, `size-4` |
-| Text | `text-{color}-{shade}`, `text-sm/base/lg`, `font-medium/bold`, `text-center` |
-| Border | `border`, `border-gray-300`, `rounded`, `rounded-lg` |
-| Background | `bg-{color}-{shade}` |
-| State prefixes | `hover:`, `focus:`, `disabled:` |
+| Category       | Classes                                                                      |
+| -------------- | ---------------------------------------------------------------------------- |
+| Layout         | `flex`, `grid`, `block`, `inline-block`, `hidden`                            |
+| Flex           | `items-center`, `justify-between`, `gap-2`, `flex-1`, `flex-col`             |
+| Spacing        | `p-{N}`, `px-`, `py-`, `m-`, `mx-`, `gap-`                                   |
+| Sizing         | `w-full`, `w-{N}`, `max-w-md`, `min-w-0`, `size-4`                           |
+| Text           | `text-{color}-{shade}`, `text-sm/base/lg`, `font-medium/bold`, `text-center` |
+| Border         | `border`, `border-gray-300`, `rounded`, `rounded-lg`                         |
+| Background     | `bg-{color}-{shade}`                                                         |
+| State prefixes | `hover:`, `focus:`, `disabled:`                                              |
 
 ## Tailwind v4 — key renames
 
 Some classes were renamed in v4. The IDE warns about the old names.
 
-| v3 (deprecated) | v4 |
-|-----------------|-----|
-| `break-words` | `wrap-break-word` |
-| `break-normal` | `wrap-normal` |
-| New in v4 | `wrap-anywhere` (allows breaking inside words for layout purposes) |
+| v3 (deprecated) | v4                                                                 |
+| --------------- | ------------------------------------------------------------------ |
+| `break-words`   | `wrap-break-word`                                                  |
+| `break-normal`  | `wrap-normal`                                                      |
+| New in v4       | `wrap-anywhere` (allows breaking inside words for layout purposes) |
 
 ## Common gotcha: long content overflows a flex container
 
@@ -62,9 +62,13 @@ By default, a flex item refuses to shrink below the width of its content. A long
 **Fix — combine two classes:**
 
 ```tsx
-<div className="flex gap-2">
-  <div className="min-w-0">          {/* allow this flex child to shrink */}
-    <span className="wrap-anywhere"> {/* allow breaking inside words */}
+<div className='flex gap-2'>
+  <div className='min-w-0'>
+    {' '}
+    {/* allow this flex child to shrink */}
+    <span className='wrap-anywhere'>
+      {' '}
+      {/* allow breaking inside words */}
       {potentiallyVeryLongText}
     </span>
   </div>
@@ -82,17 +86,21 @@ Without `min-w-0`, the wrap rules can't take effect because the flex item insist
 `flex-1` (= `flex: 1 1 0%`) tells a flex item "grow to fill available space". But "available space" only exists if the **flex container itself has a defined width**. If the container's width comes from its children (the default for a `<form>`, `<div>`, etc. with no width set), `flex-1` has nothing to grow into — it stays at content size.
 
 ```tsx
-{/* ❌ Form has no width — flex-1 has nothing to fill */}
-<form className="flex gap-2">
-  <Input className="flex-1" />
+{
+  /* ❌ Form has no width — flex-1 has nothing to fill */
+}
+<form className='flex gap-2'>
+  <Input className='flex-1' />
   <Button>Add</Button>
-</form>
+</form>;
 
-{/* ✅ Container has a width — flex-1 grows to fill it */}
-<form className="flex gap-2 w-full max-w-md">
-  <Input className="flex-1" />
+{
+  /* ✅ Container has a width — flex-1 grows to fill it */
+}
+<form className='flex w-full max-w-md gap-2'>
+  <Input className='flex-1' />
   <Button>Add</Button>
-</form>
+</form>;
 ```
 
 The cascade:
@@ -112,7 +120,7 @@ If `flex-1` "doesn't do anything", look up the chain: the container or one of it
 For lists or stacked rows where you want a thin line **between** items (but not on the outer edges), use `divide-y` (horizontal lines) or `divide-x` (vertical lines) on the **parent**:
 
 ```tsx
-<ul className="flex flex-col divide-y divide-gray-200">
+<ul className='flex flex-col divide-y divide-gray-200'>
   <li>...</li>
   <li>...</li>
   <li>...</li>
@@ -127,11 +135,11 @@ Combine with color (`divide-gray-200`, `divide-slate-300`, etc.) and width (`div
 
 Both create separation between siblings, but they're different tools:
 
-| | `gap` | `divide-*` |
-|---|---|---|
-| What it does | Empty space | A visible line |
-| Children layout | Pushes them apart | Children touch each other |
-| Combine? | Yes — visible line in the middle of the gap | — |
+|                 | `gap`                                       | `divide-*`                |
+| --------------- | ------------------------------------------- | ------------------------- |
+| What it does    | Empty space                                 | A visible line            |
+| Children layout | Pushes them apart                           | Children touch each other |
+| Combine?        | Yes — visible line in the middle of the gap | —                         |
 
 For a rich list with clear row separation, **drop `gap`** and use only `divide-y` — children get a visible boundary, padding inside each child controls breathing room. Mixing `gap-2` with `divide-y` makes the line "float" in the empty space and looks unfinished.
 

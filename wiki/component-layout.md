@@ -1,13 +1,13 @@
 # Internal vs external layout
 
-A core composition principle: **a component owns the layout *inside* itself, the parent owns *where* the component sits**. Mixing these two responsibilities is the source of most "this component is hard to reuse" pain.
+A core composition principle: **a component owns the layout _inside_ itself, the parent owns _where_ the component sits**. Mixing these two responsibilities is the source of most "this component is hard to reuse" pain.
 
 ## The two layers
 
-| Layer | What | Owned by |
-|-------|------|----------|
-| Internal layout | How the component's own children are arranged relative to each other | The component itself |
-| External layout | Width, margin, position on the page, surrounding spacing | The parent that places the component |
+| Layer           | What                                                                 | Owned by                             |
+| --------------- | -------------------------------------------------------------------- | ------------------------------------ |
+| Internal layout | How the component's own children are arranged relative to each other | The component itself                 |
+| External layout | Width, margin, position on the page, surrounding spacing             | The parent that places the component |
 
 A reusable component must **not** know about its outer context, because that context changes every time it's reused.
 
@@ -39,12 +39,12 @@ A todo form should look like this:
 export const AddTodoForm = ({ onAdd }: AddTodoFormProps) => {
   // ...
   return (
-    <form onSubmit={handleSubmit} className="flex items-start gap-2 w-full">
-      <Input className="flex-1" /* ... */ />
-      <Button type="submit">Add</Button>
+    <form onSubmit={handleSubmit} className='flex w-full items-start gap-2'>
+      <Input className='flex-1' /* ... */ />
+      <Button type='submit'>Add</Button>
     </form>
-  )
-}
+  );
+};
 ```
 
 - `flex items-start gap-2` — internal, the form is responsible for laying out its own input and button.
@@ -54,7 +54,7 @@ The parent decides the actual width:
 
 ```tsx
 // SomePage.tsx
-<div className="max-w-md mx-auto">
+<div className='mx-auto max-w-md'>
   <AddTodoForm onAdd={addTodo} />
 </div>
 ```
@@ -85,7 +85,7 @@ The parent now can't control spacing. Two such components placed next to each ot
 
 ```tsx
 // ❌ Trying to externalize layout via props
-<AddTodoForm width="400px" marginTop="32px" />
+<AddTodoForm width='400px' marginTop='32px' />
 ```
 
 This rebuilds CSS on top of CSS. Just let the parent use a wrapper or pass `className`.
@@ -97,13 +97,13 @@ UI-kit components should accept `className` and pass it to the root element. Thi
 ```tsx
 // Input.tsx
 export const Input = ({ className = '', ...rest }: InputProps) => {
-  return <input className={[base, state, className].join(' ')} {...rest} />
-}
+  return <input className={[base, state, className].join(' ')} {...rest} />;
+};
 ```
 
 ```tsx
 // usage in another component
-<Input className="flex-1" />
+<Input className='flex-1' />
 ```
 
 The parent adds `flex-1` for layout; the input keeps its own visual styles. Both layers stay separated.
@@ -116,7 +116,7 @@ Ask:
 
 Then ask:
 
-> ...and will it look right in a *narrower* container? In a *wider* one? In a flex row?
+> ...and will it look right in a _narrower_ container? In a _wider_ one? In a flex row?
 
 If the answer requires removing or overriding existing classes from the component, the component is mixing internal and external concerns.
 

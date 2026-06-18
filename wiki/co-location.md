@@ -16,12 +16,12 @@ A common mistake is to dump every interface into `src/types/`. That folder turns
 
 **Where each kind of type belongs:**
 
-| Type | Location | Why |
-|------|----------|-----|
-| Domain entities (`Todo`, `User`, `Order`) | `src/types/<domain>.ts` | Describe the problem space, used by many components, services, tests. |
-| Component props (`TodoItemProps`, `AddTodoFormProps`) | Inside the component file | Implementation detail of one component, has exactly one consumer. |
-| API response shapes | Next to the API client that fetches them | Coupled to the network boundary. |
-| Internal helper types | At the top of the file that uses them | Private. |
+| Type                                                  | Location                                 | Why                                                                   |
+| ----------------------------------------------------- | ---------------------------------------- | --------------------------------------------------------------------- |
+| Domain entities (`Todo`, `User`, `Order`)             | `src/types/<domain>.ts`                  | Describe the problem space, used by many components, services, tests. |
+| Component props (`TodoItemProps`, `AddTodoFormProps`) | Inside the component file                | Implementation detail of one component, has exactly one consumer.     |
+| API response shapes                                   | Next to the API client that fetches them | Coupled to the network boundary.                                      |
+| Internal helper types                                 | At the top of the file that uses them    | Private.                                                              |
 
 ### Example
 
@@ -29,28 +29,28 @@ A common mistake is to dump every interface into `src/types/`. That folder turns
 
 ```ts
 interface Todo {
-  id: string
-  text: string
-  completed: boolean
+  id: string;
+  text: string;
+  completed: boolean;
 }
 
-export type { Todo }
+export type { Todo };
 ```
 
 `src/components/TodoItem/TodoItem.tsx` — props live with the component:
 
 ```tsx
-import type { Todo } from '@/types/todo'
+import type { Todo } from '@/types/todo';
 
 interface TodoItemProps {
-  todo: Todo
-  onToggle: (id: string) => void
-  onDelete: (id: string) => void
+  todo: Todo;
+  onToggle: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
 export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
   // ...
-}
+};
 ```
 
 ## Why co-locate
@@ -80,7 +80,7 @@ The same rule scales:
 
 ## Anti-pattern: "kitchen sink" files
 
-Watch out for files that grow to match a *folder name* rather than a real concept:
+Watch out for files that grow to match a _folder name_ rather than a real concept:
 
 - `types/index.ts` exporting hundreds of unrelated types.
 - `utils/helpers.ts` with functions that have nothing in common.
