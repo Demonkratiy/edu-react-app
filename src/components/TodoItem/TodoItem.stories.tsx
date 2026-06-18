@@ -1,3 +1,4 @@
+import {useState} from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import type { Todo } from '@/types/todo';    
 import { fn } from 'storybook/test'
@@ -26,6 +27,26 @@ const meta: Meta<typeof TodoItem> = {
 export default meta
 
 type Story = StoryObj<typeof TodoItem>
+
+export const Interactive: Story = {
+    args: {
+        todo: sampleTodo,
+    },
+    render: (args) => {
+        const [todo, setTodo] = useState(args.todo);
+        const handleToggle = () => {
+            setTodo((prev) => ({ ...prev, completed: !prev.completed }));
+        }
+        const noopDelete = fn();
+        return (
+            <TodoItem
+                todo={todo}
+                onToggle={handleToggle}
+                onDelete={noopDelete} //dont need delete functionality in this single TodoItem story
+            />
+        )
+    }    
+}
 
 export const Default: Story = {
   args: {
