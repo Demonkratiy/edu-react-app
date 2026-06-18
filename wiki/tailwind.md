@@ -107,6 +107,34 @@ flex child with flex-1 → grows to fill that width
 
 If `flex-1` "doesn't do anything", look up the chain: the container or one of its ancestors is sized by content, not by an explicit width. Storybook with `layout: 'centered'` is a notable case where this happens.
 
+## Dividers between siblings: `divide-x` / `divide-y`
+
+For lists or stacked rows where you want a thin line **between** items (but not on the outer edges), use `divide-y` (horizontal lines) or `divide-x` (vertical lines) on the **parent**:
+
+```tsx
+<ul className="flex flex-col divide-y divide-gray-200">
+  <li>...</li>
+  <li>...</li>
+  <li>...</li>
+</ul>
+```
+
+Generated CSS adds `border-top: 1px` to every child **except the first** — so you get exactly `count - 1` lines, never an unwanted edge border.
+
+Combine with color (`divide-gray-200`, `divide-slate-300`, etc.) and width (`divide-y-2` for thicker).
+
+### `divide-*` vs `gap-*`
+
+Both create separation between siblings, but they're different tools:
+
+| | `gap` | `divide-*` |
+|---|---|---|
+| What it does | Empty space | A visible line |
+| Children layout | Pushes them apart | Children touch each other |
+| Combine? | Yes — visible line in the middle of the gap | — |
+
+For a rich list with clear row separation, **drop `gap`** and use only `divide-y` — children get a visible boundary, padding inside each child controls breathing room. Mixing `gap-2` with `divide-y` makes the line "float" in the empty space and looks unfinished.
+
 ## Useful tools
 
 - [Tailwind docs](https://tailwindcss.com/docs) — fast search by CSS property name.

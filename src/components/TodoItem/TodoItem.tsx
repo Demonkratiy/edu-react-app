@@ -9,7 +9,7 @@ interface TodoItemProps {
 
 export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
   return (
-    <li className="flex items-center justify-between py-2 gap-3 max-w-md">
+    <li className="flex items-center justify-between py-2 gap-3 w-full">
         <label className="flex items-center gap-2 cursor-pointer min-w-0">
             <Checkbox checked={todo.completed} onChange={() => onToggle(todo.id)} />
             <span className={`${todo.completed ? 'line-through text-gray-500' : ''} wrap-anywhere`}>

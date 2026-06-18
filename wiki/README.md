@@ -14,3 +14,4 @@ For product documentation (user stories, feature specs), see [docs/](../docs/REA
 - [Barrel files](./barrel-files.md)
 - [Co-location of types and code](./co-location.md)
 - [Internal vs external layout](./component-layout.md)
+- [Rendering patterns (conditionals & lists)](./rendering-patterns.md)
