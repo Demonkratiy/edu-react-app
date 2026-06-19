@@ -29,7 +29,7 @@ export const Button = ({
   ...rest
 }: ButtonProps) => {
   const classes = [
-    'rounded font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
+    'cursor-pointer rounded font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
     variantClasses[variant],
     sizeClasses[size],
     className,

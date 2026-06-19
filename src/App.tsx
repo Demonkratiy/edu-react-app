@@ -1,10 +1,12 @@
 import { AddTodoForm } from '@/components/AddTodoForm';
+import { TodoFilter } from '@/components/TodoFilter';
 import { TodoList } from '@/components/TodoList';
-import type { Todo } from '@/types/todo';
+import type { FilterStatus, Todo } from '@/types/todo';
 import { useState } from 'react';
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [filter, setFilter] = useState<FilterStatus>('all');
 
   const addTodo = (text: string) => {
     setTodos((prev) => [...prev, { id: crypto.randomUUID(), text, completed: false }]);
@@ -20,13 +22,20 @@ function App() {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
 
+  const filteredTodos = todos.filter((todo) => {
+    if (filter === 'active') return !todo.completed;
+    if (filter === 'completed') return todo.completed;
+    return true; // 'all' case
+  });
+
   return (
     <div className='min-h-screen bg-gray-100'>
       <main className='mx-auto flex max-w-md flex-col gap-4 p-4'>
         <div className='flex flex-col gap-4 rounded-lg bg-white p-4 shadow'>
           <h1 className='text-3xl font-bold'>Todo list:</h1>
           <AddTodoForm onAdd={addTodo} />
-          <TodoList todos={todos} onToggle={toggleTodo} onDelete={deleteTodo} />
+          <TodoFilter value={filter} onChange={setFilter} />
+          <TodoList todos={filteredTodos} onToggle={toggleTodo} onDelete={deleteTodo} />
         </div>
       </main>
     </div>

@@ -21,7 +21,7 @@ Each story has acceptance criteria — testable conditions that mark the story a
 - The task text is visible.
 - The task's completed/active state is visually distinguishable.
 
-**Status:** planned
+**Status:** done
 **Components involved:** `TodoItem`
 
 ---
@@ -36,7 +36,7 @@ Each story has acceptance criteria — testable conditions that mark the story a
 - A completed task is visually different (e.g. strikethrough, muted color).
 - The action is reversible — clicking again uncompletes the task.
 
-**Status:** planned
+**Status:** done
 **Components involved:** `TodoItem`
 
 ---
@@ -50,7 +50,7 @@ Each story has acceptance criteria — testable conditions that mark the story a
 - Each task has a visible delete control.
 - Clicking it removes the task from the list immediately.
 
-**Status:** planned
+**Status:** done
 **Components involved:** `TodoItem`, `TodoList`
 
 ---
@@ -66,12 +66,12 @@ Each story has acceptance criteria — testable conditions that mark the story a
 - After submission, the input is cleared and ready for the next entry.
 - Empty or whitespace-only input does not create a task.
 
-**Status:** planned
+**Status:** done
 **Components involved:** `AddTodoForm`
 
 ---
 
-## Feature: Filtering (planned)
+## Feature: Filtering
 
 ### Story 5: Filter tasks by status
 
@@ -83,5 +83,5 @@ Each story has acceptance criteria — testable conditions that mark the story a
 - Selecting a filter narrows the visible list.
 - The active filter is visually highlighted.
 
-**Status:** planned
+**Status:** done
 **Components involved:** `TodoFilter`, `TodoList`

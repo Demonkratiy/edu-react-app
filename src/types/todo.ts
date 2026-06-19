@@ -4,4 +4,6 @@ interface Todo {
   completed: boolean;
 }
 
-export type { Todo };
+type FilterStatus = 'all' | 'active' | 'completed';
+
+export type { FilterStatus, Todo };
