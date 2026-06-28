@@ -18,3 +18,4 @@ For product documentation (user stories, feature specs), see [docs/](../docs/REA
 - [Immutable state in React](./immutable-state.md)
 - [Derived state in React](./derived-state.md)
 - [Feature-Sliced Design](./fsd-architecture.md)
+- [State management (overview & decision guide)](./state-management.md)
