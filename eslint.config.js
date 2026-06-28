@@ -60,13 +60,13 @@ export default defineConfig([
       // Rule 1: layer hierarchy. A layer imports only from layers below it.
       // `default: disallow` also forbids same-layer cross-slice imports
       // (e.g. features → features), enforcing slice isolation.
-      'boundaries/element-types': [
+      'boundaries/dependencies': [
         'error',
         {
           default: 'disallow',
           rules: FSD_LAYERS.map((layer) => ({
-            from: layer,
-            allow: allowedTargets(layer),
+            from: { type: layer },
+            allow: allowedTargets(layer).map((target) => ({ to: { type: target } })),
           })),
         },
       ],
