@@ -66,9 +66,16 @@ export default defineConfig([
           default: 'disallow',
           rules: [
             // 1a. A layer may import only from layers strictly below it.
+            // `shared` is segmented (ui, lib, api...) rather than sliced, so
+            // its segments are allowed to reference each other (shared → shared).
+            // The sliced layers (pages, widgets, features, entities) stay
+            // isolated: sibling slices cannot import each other.
             ...FSD_LAYERS.map((layer) => ({
               from: { type: layer },
-              allow: allowedTargets(layer).map((target) => ({ to: { type: target } })),
+              allow: [
+                ...(layer === 'shared' ? [{ to: { type: 'shared' } }] : []),
+                ...allowedTargets(layer).map((target) => ({ to: { type: target } })),
+              ],
             })),
             // 1b. Public API: across elements only the index may be imported,
             // never an internal file. Intra-element (same slice) imports are
