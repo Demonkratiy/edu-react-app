@@ -92,5 +92,3 @@ export default defineConfig([
   ...storybook.configs['flat/recommended'],
   prettier,
 ]);
-
-
