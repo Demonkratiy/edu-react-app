@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn, userEvent, within } from 'storybook/test';
-import { AddTodoForm } from '@/components/AddTodoForm';
+import { AddTodoForm } from './AddTodoForm';
 
 const meta: Meta<typeof AddTodoForm> = {
   title: 'Todos/AddTodoForm',
