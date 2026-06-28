@@ -4,7 +4,7 @@ import { TodoFilter, type FilterStatus } from '@/features/filter-todos';
 import { TodoList } from '@/widgets/todo-list';
 import { useState } from 'react';
 
-function App() {
+function HomePage() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<FilterStatus>('all');
 
@@ -42,4 +42,4 @@ function App() {
   );
 }
 
-export default App;
+export { HomePage };
