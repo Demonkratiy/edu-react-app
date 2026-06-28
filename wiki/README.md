@@ -19,3 +19,4 @@ For product documentation (user stories, feature specs), see [docs/](../docs/REA
 - [Derived state in React](./derived-state.md)
 - [Feature-Sliced Design](./fsd-architecture.md)
 - [State management (overview & decision guide)](./state-management.md)
+- [Redux setup (RTK)](./redux-setup.md)
