@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { Todo } from '@/types/todo';
+import type { Todo } from '@/entities/todo/model/types';
 import { fn } from 'storybook/test';
 import { TodoItem } from './TodoItem';
 

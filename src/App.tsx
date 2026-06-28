@@ -1,7 +1,8 @@
 import { AddTodoForm } from '@/components/AddTodoForm';
 import { TodoFilter } from '@/components/TodoFilter';
 import { TodoList } from '@/components/TodoList';
-import type { FilterStatus, Todo } from '@/types/todo';
+import type { Todo } from '@/entities/todo';
+import type { FilterStatus } from '@/types/todo';
 import { useState } from 'react';
 
 function App() {

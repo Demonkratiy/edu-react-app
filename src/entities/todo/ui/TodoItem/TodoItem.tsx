@@ -1,4 +1,4 @@
-import type { Todo } from '@/types/todo';
+import type { Todo } from '@/entities/todo/model/types';
 import { Button, Checkbox } from '@/shared/ui';
 
 interface TodoItemProps {
