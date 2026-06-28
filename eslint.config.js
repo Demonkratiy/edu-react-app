@@ -57,17 +57,30 @@ export default defineConfig([
       ],
     },
     rules: {
-      // Rule 1: layer hierarchy. A layer imports only from layers below it.
+      // Rule 1: layer hierarchy + public API.
       // `default: disallow` also forbids same-layer cross-slice imports
       // (e.g. features → features), enforcing slice isolation.
       'boundaries/dependencies': [
         'error',
         {
           default: 'disallow',
-          rules: FSD_LAYERS.map((layer) => ({
-            from: { type: layer },
-            allow: allowedTargets(layer).map((target) => ({ to: { type: target } })),
-          })),
+          rules: [
+            // 1a. A layer may import only from layers strictly below it.
+            ...FSD_LAYERS.map((layer) => ({
+              from: { type: layer },
+              allow: allowedTargets(layer).map((target) => ({ to: { type: target } })),
+            })),
+            // 1b. Public API: across elements only the index may be imported,
+            // never an internal file. Intra-element (same slice) imports are
+            // not checked by the plugin, so deep relative/alias imports inside
+            // a slice remain allowed.
+            {
+              from: { type: '*' },
+              disallow: [{ to: { type: '*', internalPath: '!index.{ts,tsx}' } }],
+              message:
+                'Import a slice through its public API (index), not its internal files: {{ dependency.source }}',
+            },
+          ],
         },
       ],
       // Rule 2: every file inside a layer must belong to a known element.
