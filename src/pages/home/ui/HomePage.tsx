@@ -1,26 +1,18 @@
-import type { Todo } from '@/entities/todo';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { todoAdded, todoDeleted, todoToggled } from '@/entities/todo';
 import { AddTodoForm } from '@/features/add-todo';
 import { TodoFilter, type FilterStatus } from '@/features/filter-todos';
 import { TodoList } from '@/widgets/todo-list';
 import { useState } from 'react';
 
 function HomePage() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const todos = useAppSelector((state) => state.todos.items);
+  const dispatch = useAppDispatch();
   const [filter, setFilter] = useState<FilterStatus>('all');
 
-  const addTodo = (text: string) => {
-    setTodos((prev) => [...prev, { id: crypto.randomUUID(), text, completed: false }]);
-  };
-
-  const toggleTodo = (id: string) => {
-    setTodos((prev) =>
-      prev.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo)),
-    );
-  };
-
-  const deleteTodo = (id: string) => {
-    setTodos((prev) => prev.filter((todo) => todo.id !== id));
-  };
+  const addTodo = (text: string) => dispatch(todoAdded(text));
+  const toggleTodo = (id: string) => dispatch(todoToggled(id));
+  const deleteTodo = (id: string) => dispatch(todoDeleted(id));
 
   const filteredTodos = todos.filter((todo) => {
     if (filter === 'active') return !todo.completed;
