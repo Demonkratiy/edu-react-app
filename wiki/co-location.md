@@ -18,14 +18,14 @@ A common mistake is to dump every interface into `src/types/`. That folder turns
 
 | Type                                                  | Location                                 | Why                                                                   |
 | ----------------------------------------------------- | ---------------------------------------- | --------------------------------------------------------------------- |
-| Domain entities (`Todo`, `User`, `Order`)             | `src/types/<domain>.ts`                  | Describe the problem space, used by many components, services, tests. |
+| Domain entities (`Todo`, `User`, `Order`)             | `entities/<entity>/model/types.ts`       | Describe the problem space; owned by the entity slice, used across the app. |
 | Component props (`TodoItemProps`, `AddTodoFormProps`) | Inside the component file                | Implementation detail of one component, has exactly one consumer.     |
 | API response shapes                                   | Next to the API client that fetches them | Coupled to the network boundary.                                      |
 | Internal helper types                                 | At the top of the file that uses them    | Private.                                                              |
 
 ### Example
 
-`src/types/todo.ts` — only the domain entity:
+`src/entities/todo/model/types.ts` — only the domain entity:
 
 ```ts
 interface Todo {
@@ -37,10 +37,10 @@ interface Todo {
 export type { Todo };
 ```
 
-`src/components/TodoItem/TodoItem.tsx` — props live with the component:
+`src/entities/todo/ui/TodoItem/TodoItem.tsx` — props live with the component:
 
 ```tsx
-import type { Todo } from '@/types/todo';
+import type { Todo } from '@/entities/todo/model/types';
 
 interface TodoItemProps {
   todo: Todo;

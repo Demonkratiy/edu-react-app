@@ -3,7 +3,7 @@
 A **barrel file** is an `index.ts` (or `index.js`) that re-exports the public API of a folder/module, so consumers can import from one place instead of reaching into individual files.
 
 ```ts
-// src/components/ui/index.ts
+// src/shared/ui/index.ts
 export { Button } from './Button';
 export { Input } from './Input';
 export { Checkbox } from './Checkbox';
@@ -11,26 +11,26 @@ export { Checkbox } from './Checkbox';
 
 ```tsx
 // Without barrel
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
+import { Button } from '@/shared/ui/Button';
+import { Input } from '@/shared/ui/Input';
 
 // With barrel
-import { Button, Input } from '@/components/ui';
+import { Button, Input } from '@/shared/ui';
 ```
 
 ## When to use
 
 Use a barrel **at module boundaries** — places where you want to expose a clear public API and hide internal structure:
 
-- ✅ UI kit / design system (`src/components/ui`)
-- ✅ Hooks collection (`src/hooks`)
-- ✅ Utilities (`src/utils`)
-- ✅ Per-component folder (`src/components/ui/Button/index.ts`) — hides that the file is `Button/Button.tsx`
+- ✅ UI kit / design system (`src/shared/ui`)
+- ✅ Utilities and hooks (`src/shared/lib`)
+- ✅ Per-component folder (`src/shared/ui/Button/index.ts`) — hides that the file is `Button/Button.tsx`
+- ✅ FSD slice public API (`src/entities/todo/index.ts`) — exposes only what the slice offers outward
 
 Avoid barrels where there is no clear module boundary:
 
-- ❌ Business / domain components (`TodoItem`, `AddTodoForm`) — each has its own context, no shared API surface
-- ❌ Root `src/components/` — too heterogeneous to be a single module
+- ❌ Aggregating unrelated modules under one root barrel (the old flat `src/components/`) — too heterogeneous to be a single module
+- ❌ Re-exporting a slice's internals beyond its public API — the slice `index.ts` is the boundary; don't add deeper cross-slice barrels
 
 **Rule of thumb:** barrels stop at the module boundary, they don't go all the way down.
 
@@ -65,7 +65,7 @@ The IDE may suggest two paths for the same symbol — through the barrel and dir
 
 ## Project convention
 
-- `src/components/ui/index.ts` — barrel for the UI kit
-- `src/components/ui/<Component>/index.ts` — barrel that hides the inner file structure of the component folder
-- No barrels for business components or for the `src/components/` root
-- Inside `ui/`, components import each other by direct path, not via the UI-kit barrel
+- `src/shared/ui/index.ts` — barrel for the UI kit
+- `src/shared/ui/<Component>/index.ts` — barrel that hides the inner file structure of the component folder
+- `src/<layer>/<slice>/index.ts` — public API barrel for each FSD slice (entities, features, widgets, pages)
+- Inside a slice, files import each other by direct path; only outside consumers use the slice barrel

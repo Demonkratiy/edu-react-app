@@ -14,22 +14,23 @@ A tool for developing UI components in isolation. Each component renders indepen
 Each component lives in its own folder, co-located with its story:
 
 ```
-src/components/
-├── ui/                    # generic, reusable building blocks
+src/
+├── shared/ui/              # generic, reusable building blocks
 │   └── Button/
 │       ├── Button.tsx
 │       ├── Button.stories.tsx
 │       └── index.ts
-└── TodoItem/              # business components (domain-specific)
-    ├── TodoItem.tsx
-    ├── TodoItem.stories.tsx
-    └── index.ts
+└── entities/todo/ui/       # domain components live inside their slice
+    └── TodoItem/
+        ├── TodoItem.tsx
+        ├── TodoItem.stories.tsx
+        └── index.ts
 ```
 
 `index.ts` re-exports the component so imports stay clean:
 
 ```ts
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/shared/ui/Button';
 ```
 
 ## Configuration files
@@ -45,7 +46,7 @@ import { Button } from '@/components/ui/Button';
 Storybook renders components in a separate iframe and does not know about the app's CSS by default. To make Tailwind classes work, import the global stylesheet in `preview.tsx`:
 
 ```tsx
-import '../src/index.css';
+import '../src/app/index.css';
 ```
 
 ## Anatomy of a story file
