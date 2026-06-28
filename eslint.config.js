@@ -18,7 +18,7 @@ const FSD_LAYERS = ['app', 'pages', 'widgets', 'features', 'entities', 'shared']
 const allowedTargets = (layer) => FSD_LAYERS.slice(FSD_LAYERS.indexOf(layer) + 1);
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'storybook-static', 'coverage']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
