@@ -16,12 +16,12 @@ A common mistake is to dump every interface into `src/types/`. That folder turns
 
 **Where each kind of type belongs:**
 
-| Type                                                  | Location                                 | Why                                                                   |
-| ----------------------------------------------------- | ---------------------------------------- | --------------------------------------------------------------------- |
+| Type                                                  | Location                                 | Why                                                                         |
+| ----------------------------------------------------- | ---------------------------------------- | --------------------------------------------------------------------------- |
 | Domain entities (`Todo`, `User`, `Order`)             | `entities/<entity>/model/types.ts`       | Describe the problem space; owned by the entity slice, used across the app. |
-| Component props (`TodoItemProps`, `AddTodoFormProps`) | Inside the component file                | Implementation detail of one component, has exactly one consumer.     |
-| API response shapes                                   | Next to the API client that fetches them | Coupled to the network boundary.                                      |
-| Internal helper types                                 | At the top of the file that uses them    | Private.                                                              |
+| Component props (`TodoItemProps`, `AddTodoFormProps`) | Inside the component file                | Implementation detail of one component, has exactly one consumer.           |
+| API response shapes                                   | Next to the API client that fetches them | Coupled to the network boundary.                                            |
+| Internal helper types                                 | At the top of the file that uses them    | Private.                                                                    |
 
 ### Example
 
