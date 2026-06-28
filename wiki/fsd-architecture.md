@@ -148,14 +148,15 @@ src/
 src/
   app/
     providers/         ← когда появятся (Redux Provider, Theme, и т.д.)
-    index.tsx          ← (или main.tsx) точка входа
+    main.tsx           ← бывший src/main.tsx (точка входа)
+    index.css          ← бывший src/index.css (глобальные стили)
   pages/
     home/
       ui/HomePage.tsx  ← бывший App.tsx
       index.ts
   widgets/
-    todo-board/
-      ui/TodoBoard/    ← бывший TodoList (или новая композиция)
+    todo-list/
+      ui/TodoList/     ← бывший components/TodoList
       index.ts
   features/
     add-todo/
@@ -163,18 +164,20 @@ src/
       index.ts
     filter-todos/
       ui/TodoFilter/   ← бывший components/TodoFilter
+      model/
+        types.ts       ← FilterStatus (из старого src/types/todo.ts)
       index.ts
   entities/
     todo/
       ui/TodoItem/     ← бывший components/TodoItem
       model/
-        types.ts       ← бывший src/types/todo.ts
+        types.ts       ← Todo (из старого src/types/todo.ts)
       index.ts
   shared/
     ui/
       Button/          ← бывший components/ui/Button
       Checkbox/        ← бывший components/ui/Checkbox
-      IconButton/      ← бывший components/ui/IconButton
+      Input/           ← бывший components/ui/Input
       index.ts         ← root barrel UI kit'а
 ```
 
@@ -183,9 +186,9 @@ src/
 - **`TodoItem` → entity.** Это представление сущности `Todo`. Знает как отобразить todo, не знает откуда тот взялся и что с ним делать.
 - **`AddTodoForm` → feature `add-todo`.** Действие пользователя — добавление новой todo. Глагол.
 - **`TodoFilter` → feature `filter-todos`.** Действие — переключение фильтра.
-- **`TodoList` → widget `todo-board`.** Композиция: рендерит много `TodoItem`, принимает обработчики. Сейчас это просто список, но логически это «доска со списком задач».
-- **`App.tsx` → page `home`.** Сейчас в App вся логика приложения. По FSD page просто собирает виджеты и фичи; в нашем случае page будет собирать `todo-board` + `add-todo` + `filter-todos`.
-- **`types/todo.ts` → `entities/todo/model/types.ts`.** Тип `Todo` принадлежит сущности. `FilterStatus` пока ляжет рядом, но позже переедет в `features/filter-todos/model/` (после Redux-главы).
+- **`TodoList` → widget `todo-list`.** Композиция: рендерит много `TodoItem`, принимает обработчики. Для чистого переноса оставили имя `TodoList` (без переименования в `TodoBoard`).
+- **`App.tsx` → page `home`.** Вся логика приложения была в `App`. По FSD page просто собирает виджеты и фичи; наш `home` собирает `todo-list` + `add-todo` + `filter-todos`. Компонент переименован `App` → `HomePage`.
+- **`Todo` → `entities/todo/model/types.ts`**, **`FilterStatus` → `features/filter-todos/model/types.ts`.** Тип `Todo` принадлежит сущности, `FilterStatus` — фиче фильтрации, поэтому они разъехались по разным слоям. Старый `src/types/todo.ts` удалён.
 
 ## Типичные ошибки
 
