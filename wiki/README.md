@@ -17,3 +17,4 @@ For product documentation (user stories, feature specs), see [docs/](../docs/REA
 - [Rendering patterns (conditionals & lists)](./rendering-patterns.md)
 - [Immutable state in React](./immutable-state.md)
 - [Derived state in React](./derived-state.md)
+- [Feature-Sliced Design](./fsd-architecture.md)
