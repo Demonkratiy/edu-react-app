@@ -1,5 +1,5 @@
 import type { Todo } from '@/types/todo';
-import { Button, Checkbox } from '@/components/ui';
+import { Button, Checkbox } from '@/shared/ui';
 
 interface TodoItemProps {
   todo: Todo;

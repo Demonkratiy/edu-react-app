@@ -1,4 +1,4 @@
-import { Button, Input } from '@/components/ui';
+import { Button, Input } from '@/shared/ui';
 import { useState, type SubmitEvent } from 'react';
 
 interface AddTodoFormProps {
