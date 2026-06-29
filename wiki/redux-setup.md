@@ -126,6 +126,8 @@ export const todoReducer = todoSlice.reducer;
 - **`prepare`** — колбэк который формирует payload до того как он попадёт в reducer. Здесь генерируем `id` внутри slice, чтобы компонент диспатчил просто `todoAdded(text)` и не знал как делаются id. Reducer и prepare — две части одного action creator.
 - Экспортируем **actions** (их будут диспатчить компоненты) и **reducer** (его подключает store).
 
+> Глубже про action, payload, Immer и почему `todoAdded` лежит в entity, а не в feature — в [redux-concepts.md](./redux-concepts.md).
+
 ## Где что лежит (FSD)
 
 | Что                                 | Где                                | Почему                                                                                           |
