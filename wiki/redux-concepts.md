@@ -110,6 +110,62 @@ filterChanged(state, action) { state.status = action.payload; return state; }
 - В `createSlice` / `createReducer` (RTK) — по умолчанию.
 - **Вне** RTK-reducer'ов (в компоненте, в обычном `useState`) Immer не работает — там мутация будет настоящим багом. «Мутируй смело» — только внутри reducer'ов slice.
 
+## Локальный `state` редьюсера vs глобальный `state` селектора
+
+Частая путаница: в редьюсере пишем `state.status`, а в селекторе `state.filter.status`. Кажется несимметрично. Причина в том, что **это два разных `state` с разным масштабом**.
+
+```
+СЕЛЕКТОР видит ВЕСЬ стор:            РЕДЬЮСЕР видит ТОЛЬКО свой слайс:
+state = {                            state = { status: 'all' }
+  todos:  { items: [...] },                  ▲ весь state внутри filterChanged
+  filter: { status: 'all' }
+}
+```
+
+- В **селекторе** `state` — глобальное дерево (`RootState`). До статуса: `state.filter.status`.
+- В **редьюсере** `state` — уже сам слайс (`{ status }`). Redux передаёт каждому редьюсеру **только его кусок**, поэтому там `state.status`. Внутри редьюсера `state.filter` не существует — это было бы `state.filter.filter`.
+
+### Откуда берётся `filter` в `state.filter`
+
+Не из слайса, а из **ключа в `store.ts`**:
+
+```ts
+// app/store.ts
+reducer: {
+  filter: filterReducer, // ◄ слайс монтируется в state.filter
+}
+```
+
+Ключ выбираешь ты. Назвал бы `mode: filterReducer` — селектор стал бы `state.mode.status`, **а редьюсер не изменился бы**. Точка монтирования задаётся в сторе, не в слайсе. (А `name: 'filter'` внутри `createSlice` влияет только на префикс `type` экшенов — `'filter/...'`, — не на место монтирования.)
+
+### Поле ≠ редьюсер
+
+```
+filter           ← имя слайса (name) → префикс type экшенов
+  status         ← ПОЛЕ состояния (из initialState)
+  filterChanged  ← РЕДЬЮСЕР (обработчик, меняющий это поле)
+```
+
+`status` — поле данных; `filterChanged` — редьюсер. Это разные сущности.
+
+### Почему несимметрия — это правильно
+
+Редьюсер **локальный** (видит свой слайс), селектор **глобальный** (видит всё). Это фича:
+
+- Слайс самодостаточен и не знает где смонтирован — можно переставить под другой ключ в `store.ts`, не трогая редьюсер (поменяются только селекторы).
+- Каждый редьюсер зависит только от своего куска, не от формы всего стора → слайсы собираются как кубики.
+
+### Цепочка целиком
+
+```
+store.ts:  reducer: { filter: filterReducer }   →  слайс живёт в state.filter
+слайс:     name: 'filter', state: { status }    →  локальная форма { status }
+редьюсер:  state.status = action.payload        →  state = СЛАЙС, меняем поле
+селектор:  (state) => state.filter.status       →  state = ВЕСЬ стор, идём filter → status
+```
+
+> Редьюсер пишет «изнутри» слайса (`state.status`), селектор читает «снаружи» из глобального дерева (`state.filter.status`). Одни данные, разные точки обзора. `filter` в пути — ключ из `store.ts`, не часть слайса.
+
 ## Где живут actions: entity vs feature
 
 Почему `todoAdded` лежит в `entities/todo`, а не в `features/add-todo`?
