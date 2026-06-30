@@ -1,25 +1,27 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { todoAdded, todoDeleted, todoToggled } from '@/entities/todo';
 import { AddTodoForm } from '@/features/add-todo';
-import { filterChanged, TodoFilter, type FilterStatus } from '@/features/filter-todos';
+import {
+  filterChanged,
+  selectFilteredTodos,
+  selectFilterStatus,
+  TodoFilter,
+  type FilterStatus,
+} from '@/features/filter-todos';
 import { TodoList } from '@/widgets/todo-list';
 
 function HomePage() {
-  const todos = useAppSelector((state) => state.todos.items);
-  const filterStatus = useAppSelector((state) => state.filter.status);
+  const filterStatus = useAppSelector(selectFilterStatus);
+  const filteredTodos = useAppSelector(selectFilteredTodos);
+
   const dispatch = useAppDispatch();
 
+  // todo slice actions
   const addTodo = (text: string) => dispatch(todoAdded(text));
   const toggleTodo = (id: string) => dispatch(todoToggled(id));
   const deleteTodo = (id: string) => dispatch(todoDeleted(id));
-
+  // filter slice actions
   const setFilter = (status: FilterStatus) => dispatch(filterChanged(status));
-
-  const filteredTodos = todos.filter((todo) => {
-    if (filterStatus === 'active') return !todo.completed;
-    if (filterStatus === 'completed') return todo.completed;
-    return true; // 'all' case
-  });
 
   return (
     <div className='min-h-screen bg-gray-100'>
