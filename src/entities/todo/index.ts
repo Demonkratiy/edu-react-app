@@ -1,3 +1,4 @@
-export { TodoItem } from './ui/TodoItem';
+export { selectTodos } from './model/selectors';
+export { todoAdded, todoDeleted, todoReducer, todoToggled } from './model/todoSlice';
 export type { Todo } from './model/types';
-export { todoReducer, todoAdded, todoToggled, todoDeleted } from './model/todoSlice';
+export { TodoItem } from './ui/TodoItem';
