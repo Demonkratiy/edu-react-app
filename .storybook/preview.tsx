@@ -1,7 +1,24 @@
 import type { Preview } from '@storybook/react-vite';
+import { useState } from 'react';
+import { Provider } from 'react-redux';
 import '../src/app/index.css';
+import { setupStore } from '../src/app/store';
 
 const preview: Preview = {
+  // Every story runs inside a fresh, isolated Redux store, so connected
+  // components (those using useAppSelector/useAppDispatch) work and stories
+  // don't share state. A story can preload slice state via
+  // `parameters.preloadedState` to show a specific situation.
+  decorators: [
+    (Story, context) => {
+      const [store] = useState(() => setupStore(context.parameters.preloadedState));
+      return (
+        <Provider store={store}>
+          <Story />
+        </Provider>
+      );
+    },
+  ],
   parameters: {
     controls: {
       matchers: {
