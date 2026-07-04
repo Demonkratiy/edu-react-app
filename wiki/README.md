@@ -21,3 +21,4 @@ For product documentation (user stories, feature specs), see [docs/](../docs/REA
 - [State management (overview & decision guide)](./state-management.md)
 - [Redux setup (RTK)](./redux-setup.md)
 - [Redux/RTK concepts (actions, payload, Immer)](./redux-concepts.md)
+- [State managers compared (Redux vs Zustand vs MobX)](./state-managers-comparison.md)
