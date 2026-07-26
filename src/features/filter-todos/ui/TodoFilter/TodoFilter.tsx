@@ -1,4 +1,4 @@
-import type { FilterStatus } from '@/types/todo';
+import type { FilterStatus } from '@/features/filter-todos/model/types';
 
 export interface TodoFilterProps {
   value: FilterStatus;

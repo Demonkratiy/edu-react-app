@@ -43,7 +43,7 @@ By design works with domain entities. Cannot be reused outside the project.
 
 - `TodoItem`, `TodoList`, `AddTodoForm`, `ProductCard`, `OrderRow`...
 - Accepts domain types as props.
-- Lives in `src/components/` (not in `src/components/ui/`).
+- Lives in a domain slice (`entities/`, `features/`, `widgets/`), not in `shared/ui/`.
 
 ```tsx
 <TodoItem todo={todo} onToggle={...} onDelete={...} />
@@ -52,14 +52,14 @@ By design works with domain entities. Cannot be reused outside the project.
 ## Folder convention
 
 ```
-src/components/
-├── ui/                # domain-agnostic
+src/
+├── shared/ui/         # domain-agnostic
 │   ├── Button/
 │   ├── Input/
 │   └── Checkbox/
-├── TodoItem/          # domain-specific
-├── TodoList/
-└── AddTodoForm/
+├── entities/todo/     # domain-specific: the Todo entity (TodoItem)
+├── features/          # add-todo, filter-todos
+└── widgets/           # todo-list
 ```
 
 ## Heuristic

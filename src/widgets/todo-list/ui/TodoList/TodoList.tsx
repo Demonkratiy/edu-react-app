@@ -1,5 +1,4 @@
-import { TodoItem } from '@/components/TodoItem';
-import type { Todo } from '@/types/todo';
+import { TodoItem, type Todo } from '@/entities/todo';
 
 interface TodoListProps {
   todos: Todo[];

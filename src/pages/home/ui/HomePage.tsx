@@ -1,10 +1,10 @@
-import { AddTodoForm } from '@/components/AddTodoForm';
-import { TodoFilter } from '@/components/TodoFilter';
-import { TodoList } from '@/components/TodoList';
-import type { FilterStatus, Todo } from '@/types/todo';
+import type { Todo } from '@/entities/todo';
+import { AddTodoForm } from '@/features/add-todo';
+import { TodoFilter, type FilterStatus } from '@/features/filter-todos';
+import { TodoList } from '@/widgets/todo-list';
 import { useState } from 'react';
 
-function App() {
+function HomePage() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<FilterStatus>('all');
 
@@ -42,4 +42,4 @@ function App() {
   );
 }
 
-export default App;
+export { HomePage };

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { TodoList } from './TodoList';
-import type { Todo } from '@/types/todo';
+import type { Todo } from '@/entities/todo';
 
 const buildTodos = (count: number, options: { mixed?: boolean; completed?: boolean } = {}) => {
   const { mixed = false, completed = false } = options;
