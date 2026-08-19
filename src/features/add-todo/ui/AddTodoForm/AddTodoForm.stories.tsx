@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn, userEvent, within } from 'storybook/test';
+import { expect, fn, userEvent, within } from 'storybook/test';
 import { AddTodoForm } from './AddTodoForm';
 
 const meta: Meta<typeof AddTodoForm> = {
@@ -10,42 +9,22 @@ const meta: Meta<typeof AddTodoForm> = {
     layout: 'padded',
   },
   tags: ['autodocs'],
-  args: {
-    onAdd: fn(),
-  },
+  args: { onAdd: fn() },
 };
 export default meta;
 
 type Story = StoryObj<typeof AddTodoForm>;
 
-export const Interactive: Story = {
-  render: (args) => {
-    const [todos, setTodos] = useState<string[]>([]);
+// Presentational again — onAdd is a prop, the widget owns the dispatch.
+export const Default: Story = {};
 
-    const handleAdd = (text: string) => {
-      args.onAdd(text); // вызовем из args — попадёт в Actions panel
-      setTodos((prev) => [...prev, text]);
-    };
-
-    return (
-      <div className='flex flex-col gap-3'>
-        <AddTodoForm onAdd={handleAdd} />
-        <ul>
-          {todos.map((t, i) => (
-            <li key={i}>• {t}</li>
-          ))}
-        </ul>
-      </div>
-    );
-  },
-};
-
-export const Empty: Story = {};
-
-export const Filled: Story = {
-  play: async ({ canvasElement }) => {
+export const AddsTodo: Story = {
+  play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    const input = canvas.getByPlaceholderText('Add a new todo');
+    const input = canvas.getByPlaceholderText('Add a new todo task');
     await userEvent.type(input, 'Buy milk');
+    await userEvent.click(canvas.getByRole('button', { name: 'Add' }));
+    await expect(input).toHaveValue(''); // input cleared after submit
+    await expect(args.onAdd).toHaveBeenCalledWith('Buy milk');
   },
 };

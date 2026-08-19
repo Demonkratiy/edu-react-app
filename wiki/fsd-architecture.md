@@ -210,6 +210,8 @@ src/
 - **`TodoFilter` → feature `filter-todos`.** Действие — переключение фильтра.
 - **`TodoList` → widget `todo-list`.** Композиция: рендерит много `TodoItem`, принимает обработчики. Для чистого переноса оставили имя `TodoList` (без переименования в `TodoBoard`).
 - **`App.tsx` → page `home`.** Вся логика приложения была в `App`. По FSD page просто собирает виджеты и фичи; наш `home` собирает `todo-list` + `add-todo` + `filter-todos`. Компонент переименован `App` → `HomePage`.
+
+> **Обновление.** По code review виджет переехал в `widgets/todo` (`TodoWidget`) — вся логика экрана собрана в один composite-хук `useTodoWidget`, `AddTodoForm`/`TodoFilter` снова презентационные. `todo-list` как отдельный connected-виджет удалён. Подробности и мотивация — в [Composite-хук виджета](./widget-facade-hook.md).
 - **`Todo` → `entities/todo/model/types.ts`**, **`FilterStatus` → `features/filter-todos/model/types.ts`.** Тип `Todo` принадлежит сущности, `FilterStatus` — фиче фильтрации, поэтому они разъехались по разным слоям. Старый `src/types/todo.ts` удалён.
 
 ## Типичные ошибки

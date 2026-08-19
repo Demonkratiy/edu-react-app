@@ -87,6 +87,16 @@ export default defineConfig([
               message:
                 'Import a slice through its public API (index), not its internal files: {{ dependency.source }}',
             },
+            // 1c. Documented exception: the Redux store and its typed hooks live
+            // in `app/` because the store composes every slice and must sit at
+            // the top layer. They are cross-cutting infrastructure, so any layer
+            // may import `@/app/store` and `@/app/hooks`. This is the single
+            // sanctioned upward import. (A stricter alternative — hooks in
+            // shared with reducer injection — is noted in wiki/redux-setup.md.)
+            {
+              from: { type: '*' },
+              allow: [{ to: { type: 'app', internalPath: '{store,hooks}.{ts,tsx}' } }],
+            },
           ],
         },
       ],

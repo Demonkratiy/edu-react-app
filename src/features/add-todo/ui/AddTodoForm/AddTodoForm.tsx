@@ -8,6 +8,7 @@ interface AddTodoFormProps {
 export const AddTodoForm = ({ onAdd }: AddTodoFormProps) => {
   const [text, setText] = useState('');
   const trimmedText = text.trim();
+
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (trimmedText === '') return;

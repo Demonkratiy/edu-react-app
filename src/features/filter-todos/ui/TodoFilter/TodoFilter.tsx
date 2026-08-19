@@ -1,21 +1,21 @@
 import type { FilterStatus } from '@/features/filter-todos/model/types';
 
-export interface TodoFilterProps {
-  value: FilterStatus;
-  onChange: (filter: FilterStatus) => void;
-}
-
 const OPTIONS: { value: FilterStatus; label: string }[] = [
   { value: 'all', label: 'All' },
   { value: 'active', label: 'Active' },
   { value: 'completed', label: 'Completed' },
 ];
 
-export const TodoFilter = ({ value, onChange }: TodoFilterProps) => {
+interface TodoFilterProps {
+  status: FilterStatus;
+  onChange: (status: FilterStatus) => void;
+}
+
+export const TodoFilter = ({ status, onChange }: TodoFilterProps) => {
   return (
     <div role='group' aria-label='Filter todos' className='inline-flex divide-x divide-gray-300'>
       {OPTIONS.map((option) => {
-        const isActive = value === option.value;
+        const isActive = status === option.value;
         return (
           <button
             key={option.value}
