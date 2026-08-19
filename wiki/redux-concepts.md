@@ -2,6 +2,8 @@
 
 Концептуальная заметка-справочник: что такое action, payload, Immer и где живут actions. Дополняет [redux-setup.md](./redux-setup.md) (там — как мы настроили store; здесь — что означают понятия).
 
+> Как `useAppSelector`/`useAppDispatch` вообще могут вызываться внутри хука вроде `useTodoWidget` — механика хуков разобрана отдельно в [react-hooks-fundamentals.md](./react-hooks-fundamentals.md).
+
 ## Action — запись о событии
 
 **Action — обычный JS-объект, описывающий что произошло.** Не команда «сделай», а факт «случилось» — как запись в журнале событий.

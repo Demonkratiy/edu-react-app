@@ -22,3 +22,5 @@ For product documentation (user stories, feature specs), see [docs/](../docs/REA
 - [Redux setup (RTK)](./redux-setup.md)
 - [Redux/RTK concepts (actions, payload, Immer)](./redux-concepts.md)
 - [State managers compared (Redux vs Zustand vs MobX)](./state-managers-comparison.md)
+- [Хуки и кастомные хуки: как это устроено внутри](./react-hooks-fundamentals.md)
+- [Composite-хук виджета (facade hook)](./widget-facade-hook.md)
