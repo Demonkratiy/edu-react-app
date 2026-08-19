@@ -1,34 +1,33 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, fn, userEvent, within } from 'storybook/test';
 import { TodoFilter } from './TodoFilter';
 
 const meta = {
   title: 'Todos/TodoFilter',
   component: TodoFilter,
   tags: ['autodocs'],
+  args: { status: 'all', onChange: fn() },
 } satisfies Meta<typeof TodoFilter>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Empty store → the filter defaults to 'all'.
 export const Default: Story = {};
 
-// Preload the filter slice to show a specific selected state (no props involved).
 export const ActiveSelected: Story = {
-  parameters: { preloadedState: { filter: { status: 'active' } } },
+  args: { status: 'active' },
 };
 
 export const CompletedSelected: Story = {
-  parameters: { preloadedState: { filter: { status: 'completed' } } },
+  args: { status: 'completed' },
 };
 
-// Clicking a button dispatches filterChanged; the component reflects it itself.
+// Controlled component: it reports the click, the widget decides the next status.
 export const SelectsFilter: Story = {
-  play: async ({ canvasElement }) => {
+  play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const activeBtn = canvas.getByRole('button', { name: 'Active' });
     await userEvent.click(activeBtn);
-    await expect(activeBtn).toHaveAttribute('aria-pressed', 'true'); // компонент сам отразил
+    await expect(args.onChange).toHaveBeenCalledWith('active');
   },
 };

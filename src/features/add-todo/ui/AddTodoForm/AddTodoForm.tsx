@@ -1,20 +1,18 @@
-import { useAppDispatch } from '@/app/hooks';
-import { todoAdded } from '@/entities/todo';
 import { Button, Input } from '@/shared/ui';
 import { useState, type SubmitEvent } from 'react';
 
-export const AddTodoForm = () => {
+interface AddTodoFormProps {
+  onAdd: (text: string) => void;
+}
+
+export const AddTodoForm = ({ onAdd }: AddTodoFormProps) => {
   const [text, setText] = useState('');
-
-  const dispatch = useAppDispatch();
-
-  const addTodo = (text: string) => dispatch(todoAdded(text));
   const trimmedText = text.trim();
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (trimmedText === '') return;
-    addTodo(trimmedText);
+    onAdd(trimmedText);
     setText('');
   };
 
